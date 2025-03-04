@@ -49,10 +49,10 @@ const ExperienceItem = ({
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* Project Image Thumbnail - Scaled width */}
-      <div className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} flex-shrink-0`} 
+      <div className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0`} 
         onClick={() => images.length > 0 && setIsModalOpen(true)}
       >
-        <div className="relative w-full h-full">
+        <div className="relative size-full">
           <Image
             src={thumbnail?.src || images[0].src}
             alt={thumbnail?.alt || images[0].alt}
@@ -65,7 +65,7 @@ const ExperienceItem = ({
       </div>
 
       {/* Experience Content */}
-      <div className="flex-grow space-y-4">
+      <div className="grow space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
           <div>
             <h4 className="text-gray-900 dark:text-white font-medium">{company}</h4>
@@ -95,7 +95,7 @@ const ExperienceItem = ({
           <div className="w-[90vw] max-w-5xl flex flex-col items-center gap-6">
             {/* Main Image */}
             <div 
-              className="relative w-full aspect-[4/3]"
+              className="relative size-full"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -130,7 +130,7 @@ const ExperienceItem = ({
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 cursor-pointer transition-all duration-200
+                        className={`relative size-20 flex-shrink-0 cursor-pointer transition-all duration-200
                           ${index === currentImageIndex 
                             ? 'border-2 border-white opacity-100' 
                             : 'border border-gray-600 opacity-50 hover:opacity-75'

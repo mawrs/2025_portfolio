@@ -35,7 +35,7 @@ const Portfolio: FC = () => {
           <div className="flex-1 space-y-8">
             {/* Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 dark:text-white font-semibold leading-tight">
-              Hello! I'm Martin, a{' '}
+              Hello! I&apos;m Martin, a{' '}
               <span className="relative inline-block group">
                 <span 
                   className={`
@@ -93,7 +93,7 @@ const Portfolio: FC = () => {
               </p>
 
               <p>
-                I love working on personal projects. I'm currently building{' '}
+                I love working on personal projects. I&apos;m currently building{' '}
                 <a 
                   href="https://newcareers.fyi" 
                   target="_blank" 
@@ -106,11 +106,11 @@ const Portfolio: FC = () => {
               </p>
 
               <p>
-                If I wasn't a designer full-time, I would be a developer, marketer, or researcher... or anything that heavily influences the direction of a product. As long as I'm involved in the product decision-making process.
+                If I wasn&apos;t a designer full-time, I would be a developer, marketer, or researcher... or anything that heavily influences the direction of a product. As long as I&apos;m involved in the product decision-making process.
               </p>
 
               <p>
-                If you're looking for a solid designer that dabbles in many creatives, you should text or email me. You're also more than welcome to test my hard skills in any way you see fit. Bring it on.
+                If you&apos;re looking for a solid designer that dabbles in many creatives, you should text or email me. You&apos;re also more than welcome to test my hard skills in any way you see fit. Bring it on.
               </p>
             </div>
           </div>

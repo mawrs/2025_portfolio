@@ -132,13 +132,13 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
     <div className="relative group">
       {/* Glow effect */}
-      <div className="absolute -inset-[1px] bg-gradient-to-r 
+      <div className="absolute -inset-px bg-gradient-to-r 
         dark:from-gray-500/10 dark:via-white/20 dark:to-gray-500/10
         from-gray-900/10 via-gray-800/20 to-gray-900/10
         rounded-2xl blur-sm group-hover:blur-md transition-all duration-300" />
       
       {/* Border gradient */}
-      <div className="absolute -inset-[1px] bg-gradient-to-r 
+      <div className="absolute -inset-px bg-gradient-to-r 
         dark:from-gray-500/30 dark:via-white/30 dark:to-gray-500/30
         from-gray-900/30 via-gray-800/30 to-gray-900/30
         rounded-2xl" />
@@ -157,7 +157,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
         
         {/* Author Info with Avatar */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden relative">
+          <div className="size-10 rounded-full overflow-hidden relative">
             <Image
               src={testimonial.image}
               alt={testimonial.author}
