@@ -28,9 +28,9 @@ const Navigation = () => {
               Projects
             </Link>
             <Link 
-              href="/miscellaneous" 
+              href="/testimonials" 
               className={`transition-colors ${
-                pathname === '/miscellaneous' 
+                pathname === '/testimonials' 
                   ? 'text-gray-900 dark:text-white' 
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
