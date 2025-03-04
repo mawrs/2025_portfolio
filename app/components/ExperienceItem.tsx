@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Define the types
@@ -29,15 +29,58 @@ const ExperienceItem = ({
   thumbnail?: { src: string; alt: string; };
   images?: ProjectImage[];
 }) => {
-  console.log('ExperienceItem rendering:', { company, images });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
 
-  // Add useEffect to track modal state changes
+  // Handle scroll events
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    const scrollPercentage = Math.min((container.scrollLeft / maxScroll) * 80, 80); // Limit to 80% to keep thumb visible
+    setScrollPosition(scrollPercentage);
+  };
+
+  // Handle drag events
+  const handleDragStart = (e: React.MouseEvent) => {
+    isDraggingRef.current = true;
+    document.addEventListener('mousemove', handleDragMove);
+    document.addEventListener('mouseup', handleDragEnd);
+  };
+
+  const handleDragMove = (e: MouseEvent) => {
+    if (!isDraggingRef.current || !scrollContainerRef.current) return;
+
+    const container = scrollContainerRef.current;
+    const rect = container.getBoundingClientRect();
+    const scrollbarWidth = rect.width;
+    
+    // Constrain the drag position within the container bounds
+    const x = Math.max(0, Math.min(e.clientX - rect.left, scrollbarWidth));
+    const scrollPercentage = x / scrollbarWidth;
+    const newScrollPosition = scrollPercentage * (container.scrollWidth - container.clientWidth);
+    
+    container.scrollLeft = newScrollPosition;
+  };
+
+  const handleDragEnd = () => {
+    isDraggingRef.current = false;
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
+  };
+
+  // Clean up event listeners
   useEffect(() => {
-    console.log('Modal state changed:', isModalOpen);
-  }, [isModalOpen]);
+    return () => {
+      document.removeEventListener('mousemove', handleDragMove);
+      document.removeEventListener('mouseup', handleDragEnd);
+    };
+  }, []);
 
   const previousImage = () => {
     setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length);
@@ -47,21 +90,12 @@ const ExperienceItem = ({
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
   };
 
-  console.log('Modal open:', isModalOpen);
-  console.log('Images array:', images);
-  console.log('Current image:', images[currentImageIndex]);
-
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* Project Image Thumbnail */}
       <div 
         className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0`} 
         onClick={() => {
-          console.log('Raw click event on thumbnail');  // This should log regardless
-          console.log('Company:', company);
-          console.log('Images array length:', images?.length);
-          console.log('Full images array:', images);
-          
           if (images.length > 0) {
             setIsModalOpen(true);
           }
@@ -100,77 +134,92 @@ const ExperienceItem = ({
         </ul>
       </div>
 
-      {/* Modal */}
-      {(() => {
-        console.log('Checking modal render condition:', { isModalOpen, imagesLength: images.length });
-        return isModalOpen && images.length > 0 && (
-          <div 
-            className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
-            onClick={(e) => {
-              console.log('Modal background clicked');
-              if (e.target === e.currentTarget) setIsModalOpen(false);
-            }}
-          >
-            {/* Content Container - Reduced width */}
-            <div className="w-[80vw] h-[85vh] flex flex-col">
-              {/* Main Image Area */}
-              <div className="w-full h-[calc(85vh-8rem)] relative mb-4">
-                <Image
-                  src={images[currentImageIndex].src}
-                  alt={images[currentImageIndex].alt}
-                  fill
-                  className="object-contain"
-                  priority={true}
-                  sizes="80vw"
-                />
+      {/* Modal with backdrop blur */}
+      {isModalOpen && images.length > 0 && (
+        <div 
+          className="fixed inset-0 backdrop-blur-sm bg-black/90 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+        >
+          {/* Content Container */}
+          <div className="w-[50vw] h-[85vh] flex flex-col bg-black/50 rounded-lg overflow-hidden">
+            {/* Main Image Area */}
+            <div className="w-full h-[calc(85vh-8rem)] relative mb-4">
+              <Image
+                src={images[currentImageIndex].src}
+                alt={images[currentImageIndex].alt}
+                fill
+                className="object-contain"
+                priority={true}
+                sizes="50vw"
+              />
+            </div>
+            
+            {/* Caption and Thumbnails Container */}
+            <div className="w-full md:w-[400px] lg:w-[600px] mx-auto">
+              {/* Caption */}
+              <div className="bg-black/70 text-white px-4 py-2 mb-4 flex justify-between items-center gap-4">
+                <p className="text-sm flex-1 line-clamp-2 max-w-[80%] md:max-w-none">
+                  {images[currentImageIndex].description}
+                </p>
+                <span className="text-sm whitespace-nowrap">
+                  {currentImageIndex + 1} / {images.length}
+                </span>
               </div>
-              
-              {/* Caption and Thumbnails Container */}
-              <div className="w-full md:w-[600px] lg:w-[800px] mx-auto">
-                {/* Caption */}
-                <div className="bg-black/70 text-white px-4 py-2 mb-4 flex justify-between items-center gap-4">
-                  <p className="text-sm flex-1 line-clamp-2 max-w-[80%] md:max-w-none">
-                    {images[currentImageIndex].description}
-                  </p>
-                  <span className="text-sm whitespace-nowrap">
-                    {currentImageIndex + 1} / {images.length}
-                  </span>
-                </div>
 
-                {/* Thumbnail Strip */}
-                <div className="h-16 md:h-20">
-                  <div className="h-full overflow-x-auto scrollbar-hide">
-                    <div 
-                      className="flex gap-2 p-2 h-full justify-start md:justify-center min-w-min"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {images.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`relative h-full aspect-[16/9] shrink-0 cursor-pointer transition-all duration-200
-                            ${index === currentImageIndex 
-                              ? 'border-2 border-white opacity-100' 
-                              : 'border border-gray-600 opacity-50 hover:opacity-75'
-                            }`}
-                          onClick={() => setCurrentImageIndex(index)}
-                        >
-                          <Image
-                            src={image.src}
-                            alt={image.alt}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 80px, 100px"
-                          />
-                        </div>
-                      ))}
-                    </div>
+              {/* Thumbnail Strip */}
+              <div className="h-16 md:h-20 relative">
+                <div 
+                  ref={scrollContainerRef}
+                  onScroll={handleScroll}
+                  className="h-full overflow-x-auto scrollbar-hide"
+                >
+                  <div 
+                    className="flex gap-2 p-2 h-full justify-start md:justify-center min-w-min"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {images.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`relative h-full aspect-[16/9] shrink-0 cursor-pointer transition-all duration-200
+                          ${index === currentImageIndex 
+                            ? 'border-2 border-white opacity-100' 
+                            : 'border border-gray-600 opacity-50 hover:opacity-75'
+                          }`}
+                        onClick={() => setCurrentImageIndex(index)}
+                      >
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 80px, 100px"
+                        />
+                      </div>
+                    ))}
                   </div>
+                </div>
+                
+                {/* Custom Scrollbar */}
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gray-800/50 cursor-pointer">
+                  <div
+                    ref={thumbRef}
+                    onMouseDown={handleDragStart}
+                    className="absolute h-full bg-white/50 rounded-full transition-all duration-75"
+                    style={{
+                      width: '20%',
+                      left: `${Math.min(Math.max(scrollPosition, 10), 90)}%`, // Keep thumb within 10-90% range
+                      transform: 'translateX(-50%)',
+                      cursor: 'grab'
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
-        );
-      })()}
+        </div>
+      )}
     </div>
   );
 };
