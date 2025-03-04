@@ -106,7 +106,7 @@ const ExperienceItem = ({
                 priority={true}
               />
               {/* Caption */}
-              <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4 flex justify-between items-center">
+              <div className="absolute inset-x-0 bg-black/70 text-white p-4 flex justify-between items-center">
                 <p className="text-sm flex-1">{images[currentImageIndex].description}</p>
                 <span className="text-sm ml-4">
                   {currentImageIndex + 1} / {images.length}
@@ -118,8 +118,8 @@ const ExperienceItem = ({
             <div className="w-full">
               <div className="relative">
                 {/* Gradient Indicators for scroll */}
-                <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black to-transparent md:hidden pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black to-transparent md:hidden pointer-events-none" />
+                <div className="absolute left-0 inset-y-0 w-8 bg-gradient-to-r from-black to-transparent md:hidden pointer-events-none" />
+                <div className="absolute right-0 inset-y-0 w-8 bg-gradient-to-l from-black to-transparent md:hidden pointer-events-none" />
                 
                 {/* Scrollable Container */}
                 <div className="w-full overflow-x-auto scrollbar-hide">
@@ -130,7 +130,7 @@ const ExperienceItem = ({
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        className={`relative size-20 flex-shrink-0 cursor-pointer transition-all duration-200
+                        className={`relative size-20 shrink-0 cursor-pointer transition-all duration-200
                           ${index === currentImageIndex 
                             ? 'border-2 border-white opacity-100' 
                             : 'border border-gray-600 opacity-50 hover:opacity-75'

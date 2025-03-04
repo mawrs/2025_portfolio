@@ -152,7 +152,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 
         {/* Quote */}
         <blockquote className="text-gray-700 dark:text-gray-300 mb-6">
-          "{testimonial.quote}"
+          &ldquo;{testimonial.quote}&rdquo;
         </blockquote>
         
         {/* Author Info with Avatar */}

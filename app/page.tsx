@@ -19,11 +19,11 @@ const Portfolio: FC = () => {
       setTimeout(() => {
         setRoleIndex((current) => (current + 1) % roles.length);
         setIsTransitioning(false);
-      }, 300); // Slightly longer fade out
-    }, 3000); // Longer display time for each word
+      }, 300);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [roles.length]);
 
   return (
     <main className="min-h-screen bg-white dark:bg-background-dark">
@@ -39,7 +39,7 @@ const Portfolio: FC = () => {
               <span className="relative inline-block group">
                 <span 
                   className={`
-                    inline-block transition-all duration-300 transform
+                    inline-block transition-all duration-300
                     ${isTransitioning 
                       ? 'opacity-0 translate-y-2' 
                       : 'opacity-100 translate-y-0'
