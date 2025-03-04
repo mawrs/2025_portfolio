@@ -34,7 +34,7 @@ const Portfolio: FC = () => {
           {/* Left Column - Text Content */}
           <div className="flex-1 space-y-8">
             {/* Title */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 dark:text-white font-semibold leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-5xl text-gray-900 dark:text-white font-semibold leading-tight">
               Hello! I&apos;m Martin, a{' '}
               <span className="relative inline-block group">
                 <span 
