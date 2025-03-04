@@ -31,12 +31,12 @@ const testimonials: Testimonial[] = [
     image: "/testimonials/michelle.jpeg"
   },
   {
-    id: '3',
-    quote: "Martin, I appreciate you taking on the service pages and collaborating with the departments to ensure our vision was carried out",
-    author: "Taylor Powers",
+    id: '8',
+    quote: "Martin has impressed so many people with this designs and presentation skills. I love how he can take a complex problem and break it down into simple steps that are easy to understand.",
+    author: "Sam Purnell",
     role: "Product Manager",
-    company: "Underbelly",
-    image: "/testimonials/taylor.jpeg"
+    company: "MDSV Capital",
+    image: "/testimonials/sam.png"
   },
   {
     id: '4',
@@ -71,12 +71,12 @@ const testimonials: Testimonial[] = [
     image: "/testimonials/charmy.jpeg"
   },
   {
-    id: '8',
-    quote: "What sets Martin apart is his strategic thinking. He doesn't just execute designs; he questions assumptions, identifies opportunities, and delivers solutions that drive real business value. Our conversion rates have improved significantly since implementing his recommendations.",
-    author: "Sam Purnell",
+    id: '3',
+    quote: "Martin, I appreciate you taking on the service pages and collaborating with the departments to ensure our vision was carried out",
+    author: "Taylor Powers",
     role: "Product Manager",
-    company: "MDSV Capital",
-    image: "/testimonials/sam.png"
+    company: "Underbelly",
+    image: "/testimonials/taylor.jpeg"
   },
   {
     id: '10',
@@ -110,11 +110,8 @@ const Testimonials = () => {
 
           {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={testimonial.id}
-                className="h-full"
-              >
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id}>
                 <TestimonialCard testimonial={testimonial} />
               </div>
             ))}
@@ -127,7 +124,6 @@ const Testimonials = () => {
   );
 };
 
-// Testimonial Card Component
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
     <div className="relative group">
@@ -163,6 +159,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
               alt={testimonial.author}
               fill
               className="object-cover"
+              sizes="40px"
             />
           </div>
           <div>

@@ -119,7 +119,7 @@ const ExperienceItem = ({
           <div>
             <h4 className="text-gray-900 dark:text-white font-medium">{company}</h4>
             <p className="text-gray-700 dark:text-gray-300">
-              {role} <span className="text-gray-500">({contract})</span>
+              {role}
             </p>
           </div>
           <div className="sm:text-right">
@@ -170,10 +170,11 @@ const ExperienceItem = ({
 
               {/* Thumbnail Strip */}
               <div className="h-16 md:h-20 relative">
+                {/* Thumbnail Container */}
                 <div 
                   ref={scrollContainerRef}
                   onScroll={handleScroll}
-                  className="h-full overflow-x-auto scrollbar-hide"
+                  className="h-[calc(100%-12px)] overflow-x-auto scrollbar-hide"
                 >
                   <div 
                     className="flex gap-2 p-2 h-full justify-start md:justify-center min-w-min"
@@ -206,12 +207,13 @@ const ExperienceItem = ({
                   <div
                     ref={thumbRef}
                     onMouseDown={handleDragStart}
-                    className="absolute h-full bg-white/50 rounded-full transition-all duration-75"
+                    className="absolute h-full bg-white/50 rounded-full transition-all duration-75 hover:bg-white/75 active:bg-white/90"
                     style={{
                       width: '20%',
-                      left: `${Math.min(Math.max(scrollPosition, 10), 90)}%`, // Keep thumb within 10-90% range
+                      left: `${Math.min(Math.max(scrollPosition, 10), 90)}%`,
                       transform: 'translateX(-50%)',
-                      cursor: 'grab'
+                      cursor: 'grab',
+                      touchAction: 'none'
                     }}
                   />
                 </div>
