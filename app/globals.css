@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light mode selection */
+::selection {
+  background-color: rgb(0, 84, 240); /* Bright blue */
+  color: white;
+}
+
+/* Dark mode selection */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: rgb(0, 84, 240); /* Same blue for consistency */
+    color: white;
+  }
+}
+
+/* For Firefox */
+::-moz-selection {
+  background-color: rgb(0, 84, 240);
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-moz-selection {
+    background-color: rgb(0, 84, 240);
+    color: white;
+  }
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikThin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikExtralight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikLight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikRegular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikMedium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikSemibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikBlack.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/GraphikSuper.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MinervaModern';
+  src: url('/fonts/MinervaModern Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(1000px) rotate(360deg); }
+}
+
+.animate-fall {
+  animation: fall 2s cubic-bezier(.43,.21,.56,.74);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.screen-shake {
+  animation: shake 0.1s infinite;
+}
+
+.glitch-text {
+  position: relative;
+  animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes scroll-down {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes scroll-up {
+  0% { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+.animate-scroll-down {
+  animation: scroll-down 20s linear infinite;
+}
+
+.animate-scroll-up {
+  animation: scroll-up 20s linear infinite;
+}
+
+/* Add hover pause functionality */
+.hover-pause {
+  animation-play-state: running;
+}
+
+.hover-pause:hover {
+  animation-play-state: paused;
+}
+
+/* Optional: Add a subtle highlight to the card being read */
+.hover-pause:hover .bg-white {
+  background-color: #ffffff; /* Pure white instead of blue-gray */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add subtle shadow instead of color change */
+}
+
+.hover-pause:hover .dark\:bg-gray-900 {
+  background-color: #1a1a1a;
+}
+
+/* Add these to your existing animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.group:hover .group-hover\:flex {
+  display: flex;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.group-hover\:flex > span {
+  transition: all 0.2s ease-in-out;
+  padding: 2px 0;
+}
+
+.group-hover\:flex > span:hover {
+  transform: translateX(2px);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
