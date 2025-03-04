@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-// Define a type for image with description
-type ProjectImage = {
+// Define the types
+export type ProjectImage = {
   src: string;
   alt: string;
   description: string;
@@ -18,11 +18,7 @@ const ExperienceItem = ({
   points,
   contract = "W-2",
   thumbnail,
-  images = [{
-    src: '/projects/default.webp',
-    alt: 'Project preview',
-    description: 'Project overview and key features'
-  }]
+  images = []
 }: {
   company: string;
   role: string;
@@ -33,8 +29,15 @@ const ExperienceItem = ({
   thumbnail?: { src: string; alt: string; };
   images?: ProjectImage[];
 }) => {
+  console.log('ExperienceItem rendering:', { company, images });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Add useEffect to track modal state changes
+  useEffect(() => {
+    console.log('Modal state changed:', isModalOpen);
+  }, [isModalOpen]);
 
   const previousImage = () => {
     setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length);
@@ -44,11 +47,25 @@ const ExperienceItem = ({
     setCurrentImageIndex((currentImageIndex + 1) % images.length);
   };
 
+  console.log('Modal open:', isModalOpen);
+  console.log('Images array:', images);
+  console.log('Current image:', images[currentImageIndex]);
+
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* Project Image Thumbnail */}
-      <div className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0`} 
-        onClick={() => images.length > 0 && setIsModalOpen(true)}
+      <div 
+        className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0`} 
+        onClick={() => {
+          console.log('Raw click event on thumbnail');  // This should log regardless
+          console.log('Company:', company);
+          console.log('Images array length:', images?.length);
+          console.log('Full images array:', images);
+          
+          if (images.length > 0) {
+            setIsModalOpen(true);
+          }
+        }}
       >
         <div className="relative size-full">
           <Image
@@ -84,51 +101,76 @@ const ExperienceItem = ({
       </div>
 
       {/* Modal */}
-      {isModalOpen && images.length > 0 && (
-        <div 
-          className="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50"
-          onClick={(e) => e.target === e.currentTarget && setIsModalOpen(false)}
-        >
-          {/* Content Container */}
-          <div className="w-[90vw] max-w-5xl flex flex-col items-center gap-6">
-            {/* Main Image */}
-            <div 
-              className="relative size-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Image
-                src={images[currentImageIndex].src}
-                alt={images[currentImageIndex].alt}
-                fill
-                className="object-contain"
-              />
-            </div>
+      {(() => {
+        console.log('Checking modal render condition:', { isModalOpen, imagesLength: images.length });
+        return isModalOpen && images.length > 0 && (
+          <div 
+            className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
+            onClick={(e) => {
+              console.log('Modal background clicked');
+              if (e.target === e.currentTarget) setIsModalOpen(false);
+            }}
+          >
+            {/* Content Container - Reduced width */}
+            <div className="w-[80vw] h-[85vh] flex flex-col">
+              {/* Main Image Area */}
+              <div className="w-full h-[calc(85vh-8rem)] relative mb-4">
+                <Image
+                  src={images[currentImageIndex].src}
+                  alt={images[currentImageIndex].alt}
+                  fill
+                  className="object-contain"
+                  priority={true}
+                  sizes="80vw"
+                />
+              </div>
+              
+              {/* Caption and Thumbnails Container */}
+              <div className="w-full md:w-[600px] lg:w-[800px] mx-auto">
+                {/* Caption */}
+                <div className="bg-black/70 text-white px-4 py-2 mb-4 flex justify-between items-center gap-4">
+                  <p className="text-sm flex-1 line-clamp-2 max-w-[80%] md:max-w-none">
+                    {images[currentImageIndex].description}
+                  </p>
+                  <span className="text-sm whitespace-nowrap">
+                    {currentImageIndex + 1} / {images.length}
+                  </span>
+                </div>
 
-            {/* Description */}
-            <p className="text-white text-center max-w-2xl">
-              {images[currentImageIndex].description}
-            </p>
-
-            {/* Navigation Buttons */}
-            <div className="flex gap-4">
-              <button
-                onClick={previousImage}
-                className="p-2 text-white hover:text-gray-300 transition-colors"
-                aria-label="Previous image"
-              >
-                Previous
-              </button>
-              <button
-                onClick={nextImage}
-                className="p-2 text-white hover:text-gray-300 transition-colors"
-                aria-label="Next image"
-              >
-                Next
-              </button>
+                {/* Thumbnail Strip */}
+                <div className="h-16 md:h-20">
+                  <div className="h-full overflow-x-auto scrollbar-hide">
+                    <div 
+                      className="flex gap-2 p-2 h-full justify-start md:justify-center min-w-min"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {images.map((image, index) => (
+                        <div
+                          key={index}
+                          className={`relative h-full aspect-[16/9] shrink-0 cursor-pointer transition-all duration-200
+                            ${index === currentImageIndex 
+                              ? 'border-2 border-white opacity-100' 
+                              : 'border border-gray-600 opacity-50 hover:opacity-75'
+                            }`}
+                          onClick={() => setCurrentImageIndex(index)}
+                        >
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 80px, 100px"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 };
