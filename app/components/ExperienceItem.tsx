@@ -36,6 +36,14 @@ const ExperienceItem = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const previousImage = () => {
+    setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((currentImageIndex + 1) % images.length);
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-8">
       {/* Project Image Thumbnail */}
@@ -75,9 +83,51 @@ const ExperienceItem = ({
         </ul>
       </div>
 
-      {/* Modal Carousel - Only render if there are images */}
+      {/* Modal */}
       {isModalOpen && images.length > 0 && (
-        // ... Modal code here (same as before)
+        <div 
+          className="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50"
+          onClick={(e) => e.target === e.currentTarget && setIsModalOpen(false)}
+        >
+          {/* Content Container */}
+          <div className="w-[90vw] max-w-5xl flex flex-col items-center gap-6">
+            {/* Main Image */}
+            <div 
+              className="relative w-full aspect-[4/3]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={images[currentImageIndex].src}
+                alt={images[currentImageIndex].alt}
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            {/* Description */}
+            <p className="text-white text-center max-w-2xl">
+              {images[currentImageIndex].description}
+            </p>
+
+            {/* Navigation Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={previousImage}
+                className="p-2 text-white hover:text-gray-300 transition-colors"
+                aria-label="Previous image"
+              >
+                Previous
+              </button>
+              <button
+                onClick={nextImage}
+                className="p-2 text-white hover:text-gray-300 transition-colors"
+                aria-label="Next image"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
