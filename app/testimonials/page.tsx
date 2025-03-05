@@ -111,7 +111,7 @@ const Testimonials = () => {
           {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id}>
+              <div key={testimonial.id} className="h-full">
                 <TestimonialCard testimonial={testimonial} />
               </div>
             ))}
@@ -126,7 +126,7 @@ const Testimonials = () => {
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
-    <div className="relative group">
+    <div className="relative group h-full">
       {/* Glow effect */}
       <div className="absolute -inset-px bg-gradient-to-r 
         dark:from-gray-500/10 dark:via-white/20 dark:to-gray-500/10
@@ -140,19 +140,19 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
         rounded-2xl" />
 
       {/* Content */}
-      <div className="relative p-6 rounded-2xl bg-white dark:bg-[#0E1117] transition-all">
+      <div className="relative p-6 rounded-2xl bg-white dark:bg-[#0E1117] transition-all h-full flex flex-col">
         {/* Company Logo or Name */}
         <div className="text-gray-600 dark:text-gray-400 text-sm mb-4">
           {testimonial.company}
         </div>
 
         {/* Quote */}
-        <blockquote className="text-gray-700 dark:text-gray-300 mb-6">
+        <blockquote className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
           &ldquo;{testimonial.quote}&rdquo;
         </blockquote>
         
         {/* Author Info with Avatar */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mt-auto">
           <div className="size-10 rounded-full overflow-hidden relative">
             <Image
               src={testimonial.image}

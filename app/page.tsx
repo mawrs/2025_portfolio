@@ -8,10 +8,16 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Image from 'next/image';
 
+const roleDefinitions = {
+  "designer": "I create intuitive digital experiences through user-centered design, focusing on both aesthetics and functionality.",
+  "vibe coder": "I write code that not only works but feels good - combining technical skills with an eye for design and user experience.",
+  "writer": "I craft clear, engaging content that tells stories and communicates complex ideas simply."
+};
+
 const Portfolio: FC = () => {
   const [roleIndex, setRoleIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const roles = ["designer", "developer", "writer"];
+  const roles = ["designer", "vibe coder", "writer"];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,23 +55,12 @@ const Portfolio: FC = () => {
                   {roles[roleIndex]}
                 </span>
                 
-                {/* Word list appearing below */}
+                {/* Definition tooltip */}
                 <div className="absolute left-0 top-full hidden group-hover:block mt-2 z-10">
-                  <div className="min-w-[160px] bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-lg">
-                    {roles.map((role, index) => (
-                      <div 
-                        key={role}
-                        className={`
-                          px-4 py-2 transition-all duration-200
-                          ${index === roleIndex 
-                            ? 'text-gray-900 dark:text-white' 
-                            : 'text-gray-400 dark:text-gray-500'
-                          }
-                        `}
-                      >
-                        {role}
-                      </div>
-                    ))}
+                  <div className="min-w-[200px] max-w-[300px] bg-white dark:bg-[#1E1E1E] shadow-lg rounded-lg p-4 border border-gray-200 dark:border-gray-800">
+                    <p className="text-gray-900 dark:text-gray-100 text-sm leading-relaxed">
+                      {roleDefinitions[roles[roleIndex] as keyof typeof roleDefinitions]}
+                    </p>
                   </div>
                 </div>
               </span>
