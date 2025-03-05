@@ -94,21 +94,33 @@ const ExperienceItem = ({
     <div className="flex flex-col md:flex-row gap-8">
       {/* Project Image Thumbnail */}
       <div 
-        className={`w-full md:w-[240px] aspect-[3/4] md:aspect-auto relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0`} 
+        className={`w-full h-[200px] md:h-auto md:w-[240px] relative ${images.length > 0 ? 'cursor-pointer' : ''} shrink-0 group`} 
         onClick={() => {
           if (images.length > 0) {
             setIsModalOpen(true);
           }
         }}
       >
-        <div className="relative size-full">
+        {/* Glow effect */}
+        <div className="absolute -inset-px bg-gradient-to-r 
+          dark:from-gray-500/10 dark:via-white/20 dark:to-gray-500/10
+          from-gray-900/10 via-gray-800/20 to-gray-900/10
+          rounded-lg blur-sm group-hover:blur-md transition-all duration-300" />
+        
+        {/* Border gradient */}
+        <div className="absolute -inset-px bg-gradient-to-r 
+          dark:from-gray-500/30 dark:via-white/30 dark:to-gray-500/30
+          from-gray-900/30 via-gray-800/30 to-gray-900/30
+          rounded-lg" />
+
+        {/* Image Container */}
+        <div className="relative h-full">
           <Image
             src={thumbnail?.src || images[0].src}
             alt={thumbnail?.alt || images[0].alt}
             fill
             className={`object-cover rounded-lg ${images.length > 0 ? 'hover:opacity-90' : ''} transition-opacity`}
             sizes="(max-width: 768px) 100vw, 240px"
-            style={{ objectFit: 'cover' }}
           />
         </div>
       </div>

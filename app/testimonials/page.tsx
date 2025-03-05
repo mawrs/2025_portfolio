@@ -32,7 +32,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: '8',
-    quote: "Martin has impressed so many people with this designs and presentation skills. I love how he can take a complex problem and break it down into simple steps that are easy to understand.",
+    quote: "Martin has impressed so many people with his designs and presentation skills. I love how he can take a complex problem and break it down into simple steps that are easy to understand.",
     author: "Sam Purnell",
     role: "Product Manager",
     company: "MDSV Capital",
