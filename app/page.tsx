@@ -87,7 +87,7 @@ const Portfolio: FC = () => {
                 As the founder of Mawrs©, I partner with startups and established companies to design digital products that solve complex business challenges. My work spans from early-stage product strategy and UX design to building comprehensive design systems and leading cross-functional teams.
               </p>
 
-              <p>
+              {/* <p>
                 I love working on personal projects. I&apos;m currently building{' '}
                 <a 
                   href="https://newcareers.fyi" 
@@ -98,10 +98,10 @@ const Portfolio: FC = () => {
                   newcareers.fyi
                 </a>
                 {' '}to help college students find alternative career paths based on their majors.
-              </p>
+              </p> */}
 
               <p>
-                If I wasn&apos;t a designer full-time, I would be a developer, marketer, or researcher... or anything that heavily influences the direction of a product. As long as I&apos;m involved in the product decision-making process.
+              If I weren&apos;t a designer, I&apos;d likely be a developer, marketer, or researcher—any role that drives product direction and decision-making. What excites me most is shaping products from the ground up.
               </p>
 
               <p>
