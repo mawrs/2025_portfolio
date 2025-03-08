@@ -81,7 +81,7 @@ const Resume: FC = () => {
               {
                 src: '/mdsv-capital/pitch.webp',
                 alt: 'Pitch Deck',
-                description: 'Investment pitch presentation materials'
+                description: 'Launching the private beta at an event'
               }
             ]}
             thumbnail={{
@@ -119,12 +119,12 @@ const Resume: FC = () => {
               {
                 src: '/slide/hotline_number.webp',
                 alt: 'Customer Support',
-                description: 'Customer support interface and hotline system'
+                description: 'Before redesign: Customer support interface and hotline system'
               },
               {
                 src: '/slide/executives.webp',
                 alt: 'Executive Dashboard',
-                description: 'Management analytics and reporting interface'
+                description: 'Roundtable discussion with executives'
               },
               {
                 src: '/slide/sketches.webp',
@@ -176,12 +176,12 @@ const Resume: FC = () => {
               {
                 src: '/square/phishing.webp',
                 alt: 'Anti-phishing Features',
-                description: 'Security patterns and phishing prevention'
+                description: 'Disjointed design patterns created confusion'
               },
               {
                 src: '/square/figjam.webp',
                 alt: 'Design Collaboration',
-                description: 'Cross-functional team workshop outcomes'
+                description: 'Cross-functional team workshops'
               },
               {
                 src: '/square/all_departments.webp',
@@ -218,7 +218,7 @@ const Resume: FC = () => {
               {
                 src: '/facebook/before.webp',
                 alt: 'Original Interface',
-                description: 'Initial state of the public figure engagement features'
+                description: 'Initial state of notifications tray'
               },
               {
                 src: '/facebook/research.webp',
