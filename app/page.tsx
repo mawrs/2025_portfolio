@@ -9,9 +9,9 @@ import Footer from './components/Footer';
 import Image from 'next/image';
 
 const roleDefinitions = {
-  "designer": "I create intuitive digital experiences through user-centered design, focusing on both aesthetics and functionality.",
-  "vibe coder": "I write code that not only works but feels good - combining technical skills with an eye for design and user experience.",
-  "writer": "I craft clear, engaging content that tells stories and communicates complex ideas simply."
+  "designer": "I design user-centered digital experiences that blend aesthetics and functionality.",
+  "vibe coder": "I don't just write functional code, I craft digital experiences that evoke specific feelings and atmospheres.",
+  "writer": "I craft clear, engaging content that simplifies complex ideas."
 };
 
 const Portfolio: FC = () => {
