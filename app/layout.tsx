@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeModeScript } from "flowbite-react";
 import "./globals.css";
 import { ThemeProvider } from 'next-themes';
+import PostHogProvider from './providers/PostHogProvider';
 
 export const metadata: Metadata = {
   title: "Martin Tejeda",
@@ -19,9 +20,11 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body className="font-graphik antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark">
-          {children}
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark">
+            {children}
+          </ThemeProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
