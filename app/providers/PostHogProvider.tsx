@@ -1,56 +1,57 @@
 'use client'
 
+import { usePathname, useSearchParams } from "next/navigation"
+import { useEffect, Suspense } from "react"
+import { usePostHog } from 'posthog-js/react'
+
 import posthog from 'posthog-js'
-import { PostHogProvider as Provider } from 'posthog-js/react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, Suspense } from 'react'
+import { PostHogProvider as PHProvider } from 'posthog-js/react'
 
-function PostHogInitializer() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-
+export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.posthog.com',
-        capture_pageview: true,
-        capture_pageleave: true
-      })
-      console.log('PostHog initialized')
-      // Send a test event
-      posthog.capture('test_event', {
-        test: true,
-        timestamp: new Date().toISOString()
-      })
-    }
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+      person_profiles: 'identified_only',
+      capture_pageview: false // Disable automatic pageview capture, as we capture manually
+    })
   }, [])
 
+  return (
+    <PHProvider client={posthog}>
+      <SuspendedPostHogPageView />
+      {children}
+    </PHProvider>
+  )
+}
+
+function PostHogPageView() {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const posthog = usePostHog()
+
+  // Track pageviews
   useEffect(() => {
-    if (pathname) {
+    if (pathname && posthog) {
       let url = window.origin + pathname
-      if (searchParams?.toString()) {
-        url = url + `?${searchParams.toString()}`
+      if (searchParams.toString()) {
+        url = url + "?" + searchParams.toString();
       }
-      posthog.capture('$pageview', {
-        $current_url: url,
-      })
+
+      posthog.capture('$pageview', { '$current_url': url })
     }
-  }, [pathname, searchParams])
+  }, [pathname, searchParams, posthog])
 
   return null
 }
 
-export default function PostHogProvider({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+// Wrap PostHogPageView in Suspense to avoid the useSearchParams usage above
+// from de-opting the whole app into client-side rendering
+function SuspendedPostHogPageView() {
   return (
-    <Provider client={posthog}>
-      <Suspense fallback={null}>
-        <PostHogInitializer />
-      </Suspense>
-      {children}
-    </Provider>
+    <Suspense fallback={null}>
+      <PostHogPageView />
+    </Suspense>
   )
-} 
+}
+
+export default PostHogProvider 
