@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ThemeModeScript } from "flowbite-react";
 import "./globals.css";
 import { ThemeProvider } from 'next-themes';
-import { PostHogProvider } from './providers/PostHogProvider';
+import { PostHogProvider } from './providers';
 
 export const metadata: Metadata = {
   title: "Martin Tejeda",
