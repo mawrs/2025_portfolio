@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
 import posthog from 'posthog-js'
 
@@ -48,6 +48,7 @@ if (typeof window !== 'undefined' && !window.posthog) {
   })
 }
 
+// Separate PageViewCapture into its own component for Suspense
 function PageViewCapture() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -65,10 +66,19 @@ function PageViewCapture() {
   return null
 }
 
+// Wrap PageViewCapture in Suspense to handle client-side rendering
+function SuspendedPageViewCapture() {
+  return (
+    <Suspense fallback={null}>
+      <PageViewCapture />
+    </Suspense>
+  )
+}
+
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return (
     <PHProvider client={posthog}>
-      <PageViewCapture />
+      <SuspendedPageViewCapture />
       {children}
     </PHProvider>
   )
