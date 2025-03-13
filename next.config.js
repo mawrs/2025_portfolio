@@ -8,6 +8,8 @@ const nextConfig = {
       }
     ]
   },
+  // Required to support PostHog trailing slash API requests
+  skipTrailingSlashRedirect: true,
 }
 
 module.exports = nextConfig 

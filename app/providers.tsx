@@ -1,65 +1,75 @@
 'use client'
 
 import { usePathname, useSearchParams } from "next/navigation"
-import { useEffect, Suspense } from "react"
-import { usePostHog } from 'posthog-js/react'
+import { useEffect } from "react"
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
 import posthog from 'posthog-js'
 
 // Extend Window interface to include posthog
 declare global {
   interface Window {
-    posthog: typeof posthog
+    posthog?: typeof posthog
   }
 }
 
-export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    // Initialize PostHog only on the client side
-    if (typeof window !== 'undefined') {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
-        loaded: function(posthog) {
-          if (process.env.NODE_ENV === 'development') posthog.debug()
-        }
-      })
-    }
-  }, [])
-
-  return (
-    <PHProvider client={posthog}>
-      <SuspendedPostHogPageView />
-      {children}
-    </PHProvider>
-  )
+// Debug helper
+const debugLog = (message: string, data?: any) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[PostHog Debug] ${message}`, data || '')
+  }
 }
 
-function PostHogPageView() {
+// Initialize PostHog outside of component to prevent double initialization
+if (typeof window !== 'undefined' && !window.posthog) {
+  const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  const apiHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
+
+  debugLog('Initializing PostHog with config:', {
+    api_host: apiHost,
+    key: apiKey?.substring(0, 8) + '...'
+  })
+
+  posthog.init(apiKey as string, {
+    api_host: apiHost,
+    loaded: (posthog) => {
+      debugLog('PostHog loaded successfully')
+      if (process.env.NODE_ENV === 'development') {
+        posthog.debug()
+      }
+    },
+    bootstrap: {
+      distinctID: 'debug-session-' + Date.now(),
+    },
+    persistence: 'localStorage',
+    capture_pageview: false,
+    disable_session_recording: true,
+    disable_persistence: false,
+    enable_recording_console_log: false
+  })
+}
+
+function PageViewCapture() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const posthog = usePostHog()
 
-  // Track pageviews
   useEffect(() => {
-    if (pathname && posthog) {
-      let url = window.origin + pathname
-      if (searchParams.toString()) {
-        url = url + "?" + searchParams.toString();
-      }
-
-      posthog.capture('$pageview', { '$current_url': url })
+    if (pathname) {
+      const url = window.origin + pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+      debugLog('Capturing pageview:', { url })
+      posthog.capture('$pageview', {
+        $current_url: url
+      })
     }
-  }, [pathname, searchParams, posthog])
+  }, [pathname, searchParams])
 
   return null
 }
 
-// Wrap PostHogPageView in Suspense to avoid the useSearchParams usage above
-// from de-opting the whole app into client-side rendering
-function SuspendedPostHogPageView() {
+export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={null}>
-      <PostHogPageView />
-    </Suspense>
+    <PHProvider client={posthog}>
+      <PageViewCapture />
+      {children}
+    </PHProvider>
   )
 } 
